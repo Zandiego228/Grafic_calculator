@@ -42,7 +42,7 @@ class Calculator(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.fillRect(self.rect(),Qt.black)
+        painter.fillRect(self.rect(),QColor(26, 30, 36))
         font = QFont('Arial', 20,)
         axis_pen = QPen(Qt.blue)
         painter.setPen(axis_pen)
@@ -50,7 +50,7 @@ class Calculator(QWidget):
         axis_pen = QPen(Qt.green)
         painter.setPen(axis_pen)
         painter.drawLine(450, 0, 450, 900)
-        porabula_pen = QPen(Qt.red, 3)
+        porabula_pen = QPen(QColor(193, 67, 67), 3)
         porabula_pen.setWidth(3)
 
         painter.setPen(QColor(255, 255, 200))
@@ -69,7 +69,7 @@ class Calculator(QWidget):
                     painter.drawText(900 - len(error[i - 1]) * 9 - 5, 900 - i * 20, error[i - 1])
         for i, eq in enumerate(self.equation):
             if i == 0:
-                porabula_pen = QPen(Qt.red, 3)
+                porabula_pen = QPen(QColor(193, 67, 67), 3)
             if i == 1:
                 porabula_pen = QPen(QColor(200,200, 10), 3)
             prev_x = None
