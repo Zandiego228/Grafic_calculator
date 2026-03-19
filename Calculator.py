@@ -43,7 +43,7 @@ class Calculator(QWidget):
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.fillRect(self.rect(),Qt.black)
-        font = QFont('Arial', 15,)
+        font = QFont('Arial', 20,)
         axis_pen = QPen(Qt.blue)
         painter.setPen(axis_pen)
         painter.drawLine(0,450,900,450)
@@ -52,8 +52,14 @@ class Calculator(QWidget):
         painter.drawLine(450, 0, 450, 900)
         porabula_pen = QPen(Qt.red, 3)
         porabula_pen.setWidth(3)
-        painter.setPen(porabula_pen)
-        painter.drawText(60,0,"=")
+
+        painter.setPen(QColor(255, 255, 200))
+        painter.setFont(font)
+        painter.drawText(65,20,"=")
+        font = QFont('Arial', 15)
+        painter.setFont(font)
+
+
         error = []
         #def parabula_print():
 
