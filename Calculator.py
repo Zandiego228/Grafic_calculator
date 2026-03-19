@@ -32,7 +32,7 @@ class Calculator(QWidget):
         self.button = QPushButton("Create", self)
         self.button.setGeometry(0,20,60,20)
         self.button.clicked.connect(self.plot_graph)
-        self.zoom = 100
+        self.zoom = 10
         # self.pen = pen
     def plot_graph(self):
 
@@ -53,10 +53,11 @@ class Calculator(QWidget):
         porabula_pen = QPen(QColor(193, 67, 67), 3)
         porabula_pen.setWidth(3)
 
-        painter.setPen(QColor(255, 255, 200))
+        painter.setPen(QColor(20, 20, 200))
         painter.setFont(font)
         painter.drawText(65,20,"=")
         font = QFont('Arial', 15)
+        painter.drawText(20, self.WIDTH - 10, f"zoom: {int(self.zoom)}")
         painter.setFont(font)
 
 
