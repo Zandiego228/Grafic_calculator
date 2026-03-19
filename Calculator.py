@@ -111,12 +111,13 @@ class Calculator(QWidget):
         # Получаем величину прокрутки
         delta = event.angleDelta().y()
         if delta > 0:
-            self.zoom += 10
+            self.zoom *= 1.1
         else:
-            self.zoom -= 10
+            self.zoom /= 1.1
+        #self.zoom = int(self.zoom)
         print(self.zoom)
-        if self.zoom < 10:
-            self.zoom = 10
+        #if self.zoom < 10:
+        #    self.zoom = 10
 
         self.update()
 
