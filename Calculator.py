@@ -34,6 +34,8 @@ class Calculator(QWidget):
         self.button.clicked.connect(self.plot_graph)
         self.zoom = 10
         # self.pen = pen
+        self.input_field.setStyleSheet("background-color: #2e3852;border: 2px solid #61afef; color: white;")
+        self.input_field2.setStyleSheet("background-color: #2e3852;border: 2px solid #61afef; color: white;")
     def plot_graph(self):
 
         self.equation = [self.input_field.text().strip(), self.input_field2.text().strip()]
@@ -58,16 +60,16 @@ class Calculator(QWidget):
         painter.drawText(65,20,"=")
         font = QFont('Arial', 15)
         if self.zoom < 1:
-            painter.drawText(20, self.WIDTH - 10, f"zoom: {self.zoom:.1f}")
+            painter.drawText(20, self.WIDTH - 10, f"zoom: {self.zoom:.2f}")
         else:
             painter.drawText(20, self.WIDTH - 10, f"zoom: {int(self.zoom)}")
         painter.setFont(font)
-        if self.zoom < 0.1:
+        if self.zoom < 0.01:
             self.zoom *= 1.1
 
-
+        eer = ["",""]
         error = []
-        #def parabula_print():
+
 
         def error_text():
             for i in range(1, len(error) + 1):
@@ -81,43 +83,47 @@ class Calculator(QWidget):
             prev_x = None
             prev_y = None
             for x1 in range(-450, 450):
-                #if self.equation != "":
-                x = x1 / round(self.zoom, 1)
-                try:
-                    y = eval(eq, {"__builtins__":None},{
-                             "x":x,
-                        'sin':sin,
-                        "cos": cos,
-                        "e":ee,
-                        "pi": pi,
-                        "log": log,
-                        "sqrt":sqrt,
-                        "tan": tan,
-                        "tanh": tanh,
-                    })
-                    if not isinstance(y, (int, float)):
+                if self.equation[i] != '':
+                    print(self.equation)
+                    x = x1 / self.zoom
+                    try:
+                        y = eval(eq, {"__builtins__":None},{
+                                 "x":x,
+                            'sin':sin,
+                            "cos": cos,
+                            "e":ee,
+                            "pi": pi,
+                            "log": log,
+                            "sqrt":sqrt,
+                            "tan": tan,
+                            "tanh": tanh,
+                        })
+                        if not isinstance(y, (int, float)):
+                            prev_x = None
+                            prev_y = None
+                            continue
+                        eer[i] += f"{i}\n"
+                        y = float(y)*self.zoom
+                        screen_x = 450 + int(x *self.zoom)
+                        screen_y = 450 - int(y)
+                        if prev_x is not None and (-100 * 40) < y < (100 * 40):
+                            painter.setPen(porabula_pen)
+                            painter.drawLine(prev_x, prev_y, screen_x, screen_y)
+                        prev_x = screen_x
+                        prev_y = screen_y
+
+
+                    except Exception as e:
+                        error.append(f"ошибка: {e}")
                         prev_x = None
                         prev_y = None
-                        continue
-
-                    y = float(y)* round(self.zoom, 1)
-                    screen_x = 450 + int(x * round(self.zoom, 1))
-                    screen_y = 450 - int(y)
-                    if prev_x is not None and (-100 * 40) < y < (100 * 40):
-                        painter.setPen(porabula_pen)
-                        painter.drawLine(prev_x, prev_y, screen_x, screen_y)
-                    prev_x = screen_x
-                    prev_y = screen_y
-
-                except Exception as e:
-                    error.append(f"ошибка: {e}")
-                    prev_x = None
-                    prev_y = None
 
 
             painter.setPen(QColor(255,255, 200))
             painter.setFont(font)
         error_text()
+        if self.equation[0] != '' and self.equation[1] != '':
+            print(self.equation)
         #painter.setPen(porabula_pen)
 
     def wheelEvent(self, event):
