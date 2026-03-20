@@ -57,8 +57,13 @@ class Calculator(QWidget):
         painter.setFont(font)
         painter.drawText(65,20,"=")
         font = QFont('Arial', 15)
-        painter.drawText(20, self.WIDTH - 10, f"zoom: {int(self.zoom)}")
+        if self.zoom < 1:
+            painter.drawText(20, self.WIDTH - 10, f"zoom: {self.zoom:.1f}")
+        else:
+            painter.drawText(20, self.WIDTH - 10, f"zoom: {int(self.zoom)}")
         painter.setFont(font)
+        if self.zoom < 0.1:
+            self.zoom *= 1.1
 
 
         error = []
@@ -77,7 +82,7 @@ class Calculator(QWidget):
             prev_y = None
             for x1 in range(-450, 450):
                 #if self.equation != "":
-                x = x1 / self.zoom
+                x = x1 / round(self.zoom, 1)
                 try:
                     y = eval(eq, {"__builtins__":None},{
                              "x":x,
@@ -87,15 +92,16 @@ class Calculator(QWidget):
                         "pi": pi,
                         "log": log,
                         "sqrt":sqrt,
-                        "tan": tan
+                        "tan": tan,
+                        "tanh": tanh,
                     })
                     if not isinstance(y, (int, float)):
                         prev_x = None
                         prev_y = None
                         continue
 
-                    y = float(y)*self.zoom
-                    screen_x = 450 + int(x * self.zoom)
+                    y = float(y)* round(self.zoom, 1)
+                    screen_x = 450 + int(x * round(self.zoom, 1))
                     screen_y = 450 - int(y)
                     if prev_x is not None and (-100 * 40) < y < (100 * 40):
                         painter.setPen(porabula_pen)
