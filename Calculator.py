@@ -60,14 +60,16 @@ class Calculator(QWidget):
         painter.drawText(65,20,"=")
         font = QFont('Arial', 15)
         if self.zoom < 1:
-            painter.drawText(20, self.WIDTH - 10, f"zoom: {self.zoom:.2f}")
+            painter.drawText(20, self.WIDTH - 10, f"zoom: {self.zoom:.2f}%")
         else:
-            painter.drawText(20, self.WIDTH - 10, f"zoom: {int(self.zoom)}")
+            painter.drawText(20, self.WIDTH - 10, f"zoom: {int(self.zoom)}%")
         painter.setFont(font)
         if self.zoom < 0.01:
             self.zoom *= 1.1
 
-        eer = ["",""]
+        eer = [[],[]]
+        eerr = []
+
         error = []
 
 
@@ -84,11 +86,11 @@ class Calculator(QWidget):
             prev_y = None
             for x1 in range(-450, 450):
                 if self.equation[i] != '':
-                    print(self.equation)
+                    #print(self.equation)
                     x = x1 / self.zoom
                     try:
-                        y = eval(eq, {"__builtins__":None},{
-                                 "x":x,
+                        y = eval(eq , {"__builtins__":None},{
+                                 "x":x1,
                             'sin':sin,
                             "cos": cos,
                             "e":ee,
@@ -98,11 +100,26 @@ class Calculator(QWidget):
                             "tan": tan,
                             "tanh": tanh,
                         })
+
+                        eer[i] += [round(y,5)]
+                        #print(eer[i][x1+450])
+                        y = eval(eq, {"__builtins__": None}, {
+                            "x": x,
+                            'sin': sin,
+                            "cos": cos,
+                            "e": ee,
+                            "pi": pi,
+                            "log": log,
+                            "sqrt": sqrt,
+                            "tan": tan,
+                            "tanh": tanh,
+                        })
                         if not isinstance(y, (int, float)):
                             prev_x = None
                             prev_y = None
                             continue
-                        eer[i] += f"{i}\n"
+
+
                         y = float(y)*self.zoom
                         screen_x = 450 + int(x *self.zoom)
                         screen_y = 450 - int(y)
@@ -122,8 +139,21 @@ class Calculator(QWidget):
             painter.setPen(QColor(255,255, 200))
             painter.setFont(font)
         error_text()
-        if self.equation[0] != '' and self.equation[1] != '':
+        #print(eerr)
+        if self.equation[0] != '' and self.equation[1] != '' and error == []:
             print(self.equation)
+            for i in range(900):
+                #print(eer[])
+                if eer[0][i] > eer[1][i]:
+                    eerr += [eer[0][i] - eer[1][i]]
+                else:
+                    eerr += [eer[1][i] - eer[0][i]]
+                #print(eer)
+            print(min(eerr))
+            indices = [i for i, x in enumerate(eerr) if x == min(eerr)]
+            print(indices)
+
+
         #painter.setPen(porabula_pen)
 
     def wheelEvent(self, event):
@@ -133,10 +163,7 @@ class Calculator(QWidget):
             self.zoom *= 1.1
         else:
             self.zoom /= 1.1
-        #self.zoom = int(self.zoom)
-        print(self.zoom)
-        #if self.zoom < 10:
-        #    self.zoom = 10
+        #print(self.zoom)
 
         self.update()
 
