@@ -12,8 +12,10 @@
 
 #### как пользоваться графическим  калькулятором
 
-1.[зайдите на эту сcылку]()
+1.[зайдите на эту сcылку](https://github.com/Zandiego228/Grafic_calculator/releases/tag/1.0)
+
 2.скачайте `calculator.exe`
+
 3.запустите `calculator.exe`
 
 __!!!важно!!!__
